@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    div
+        h1(x-data='{message: "free kama rdv  astrub no arnak no noob"}' x-text='message').font-bold.text-3xl.underline
+        div
+            div
+            h3 Making the Best
+            h1 Food For Devs
+        span Access the WHATABYTE Team Portal
+    div
+        a(href="/user")
+            div Just dive in!
+    div(x-data='{ open: false }')
+        button(@click='open = !open')
+            | Toggle
+        div(x-show='open')
+            p This is a toggleable div.
+    div
+      button.btn.btn-primary Click me
+      button.btn.btn-secondary Click me too
