@@ -7,10 +7,11 @@ html
     meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     meta(name="theme-color", content="#000000")
     script(defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js")
-    link(rel="stylesheet", href="/tailwind.css")
-    link(rel="stylesheet", href="/style.css")
+    link(rel="stylesheet", href="/style/tailwind.css")
+    link(rel="stylesheet", href="/style/style.css")
     title #{title}
-  body.container
-    include includes/nav.pug
-    main 
+  body 
+    header.mb-5
+      include includes/nav.pug
+    main.container 
       block content

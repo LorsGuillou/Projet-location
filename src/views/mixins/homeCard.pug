@@ -1,0 +1,10 @@
+mixin homeCard(names)
+    template(x-for="name in names")
+        div(class="card w-96 bg-300 shadow-xl")
+            figure
+                img(src="./public/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg")
+            div(class="card-body")
+                h2(x-text="name" class="card-title")
+                p Ceci est un test de card
+                div(class="card-actions.justify-end")
+                    button(class="btn.btn-primary") Voir
