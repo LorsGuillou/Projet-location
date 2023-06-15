@@ -9,5 +9,13 @@ module.exports = {
     extend: {},
   },
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: false,
+    base: true,
+    styled: true,
+    utils: true,
+    rtl: false,
+    logs: true
+  }
 }
 

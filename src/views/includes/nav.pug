@@ -1,11 +1,13 @@
-header
-    nav
-        ul 
+header.navbar.bg-base-100
+    div.flex-1
+        a(href="/" class="btn btn-ghost normal-case text-xl") #{title} 
+    nav.flex-none
+        ul(class="menu menu-horizontal px-1")
             li
-                a(href="#") Lien 1
+                a(href="/") Accueil
             li
                 a(href="#") Lien 2
             li
                 a(href="#") Lien 3
             li
-                a(href="#") Lien 4
+                a(href="/about") A propos

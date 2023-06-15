@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
     res.render("index", {
-        title: "Home"
+        title: "Accueil"
     });
 });
 
@@ -36,6 +36,12 @@ app.get("/user", (req, res) => {
         userProfile: {
             nickname: "Auth0"
         }
+    });
+});
+
+app.get("/about", (req, res) => {
+    res.render("about", {
+        title: "A propos",
     });
 });
 
