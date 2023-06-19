@@ -1,10 +1,10 @@
-mixin homeCard(names)
-    template(x-for="name in names").flex.items-center.justify-center.mt-5
-        div(class="card w-96 bg-300 shadow-xl")
+mixin homeCard(item)
+    div.flex.items-center.justify-center.mt-5
+        div.card.w-96.bg-300.shadow-xl
             figure
-                img(src="../../../public/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg")
-            div(class="card-body")
-                h2(x-text="name" class="card-title")
-                p Ceci est un test de card
-                div(class="card-actions.justify-end")
-                    button(class="btn.btn-primary") Voir
+                img(src="images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg")
+            div.card-body
+                h2.card-title #{item.name}
+                p #{item.text}
+                div.card-actions.justify-end
+                    button.btn.btn-primary Voir

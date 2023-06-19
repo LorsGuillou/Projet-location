@@ -6,13 +6,13 @@ html
     link(rel="shortcut icon", href="/favicon.ico")
     meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     meta(name="theme-color", content="#000000")
-    link(rel="stylesheet", href="../public/stylesheets/tailwind.css")
-    link(rel="stylesheet", href="../public/stylesheets/style.css")
+    link(rel="stylesheet", href="stylesheets/tailwind.css")
+    link(rel="stylesheet", href="stylesheets/style.css")
     title #{title}
-  body.w-full
-    header.mb-5
+  body
+    header.mb-5.bg-base-300
       include includes/nav.pug
-    main.container.mb-5.min-h-screen
+    main.w-full.mb-5.min-h-screen
       block content
-    footer.mt-5
+    footer.mt-5.bg-neutral
       include includes/footer.pug

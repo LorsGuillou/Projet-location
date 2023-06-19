@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./app.js",
+    "dev": "nodemon ./index.js",
     "ui": "browser-sync start --config bs-config.js",
     "build:css": "postcss tailwind.css -o ./public/stylesheets/tailwind.css"
   },

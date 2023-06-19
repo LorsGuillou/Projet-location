@@ -76,9 +76,22 @@ require('./routes/user.routes')(app);
  */
 
 app.get("/", (req, res) => {
+    const data = [{
+            name: 'Test 1',
+            text: 'Ceci est le 1er test'
+        },
+        {
+            name: 'Test 2',
+            text: 'Ceci est le 2ème test'
+        },
+        {
+            name: 'Test 3',
+            text: 'Ceci est le 3ème test'
+        }
+    ];
     res.render("index", {
         title: "Accueil",
-        exemple: ['Un', 'Deux', 'Trois']
+        data
     });
 });
 
