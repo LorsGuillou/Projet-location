@@ -6,12 +6,13 @@ html
     link(rel="shortcut icon", href="/favicon.ico")
     meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     meta(name="theme-color", content="#000000")
-    script(defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js")
-    link(rel="stylesheet", href="/style/tailwind.css")
-    link(rel="stylesheet", href="/style/style.css")
+    link(rel="stylesheet", href="../public/stylesheets/tailwind.css")
+    link(rel="stylesheet", href="../public/stylesheets/style.css")
     title #{title}
-  body 
+  body.w-full
     header.mb-5
       include includes/nav.pug
-    main.container 
+    main.container.mb-5.min-h-screen
       block content
+    footer.mt-5
+      include includes/footer.pug

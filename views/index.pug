@@ -1,0 +1,12 @@
+extends layout
+include mixins/homeCard.pug
+
+block content
+    div#home.container
+        div#banner.mb-5
+            h1.font-bold.text-3xl.underline.text-center.mb-5 Nom du site
+            p.font-bold.text-1xl.text-center.mb-5 Le site de location dans les Monts d'Arrée
+        div#home-display.flex.flex-auto.mt-5.items-center.gap-4.mt-5
+            for items in exemple
+                +homeCard(items)
+
