@@ -1,10 +1,9 @@
 mixin homeCard(item)
-    div.flex.items-center.justify-center.mt-5
-        div.card.w-96.bg-300.shadow-xl
-            figure
-                img(src="images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg")
-            div.card-body
-                h2.card-title #{item.name}
-                p #{item.text}
-                div.card-actions.justify-end
-                    button.btn.btn-primary Voir
+    div.card.w-96.bg-300.shadow-xl
+        figure
+            img(src="images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg")
+        div.card-body
+            h2.card-title #{item.name}
+            p #{item.text}
+            div.card-actions.justify-end
+                button.btn.btn-primary Voir

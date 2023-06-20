@@ -1,16 +1,29 @@
-div.navbar.container
+div.navbar
     div.navbar-start
+        div.dropdown
+            label(tabindex="0" class="lg:hidden").btn.btn-ghost
+                svg(xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor")
+                    path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16")
+            ul(tabindex="0").menu.menu-sm.dropdown-content.mt-3.p-2.shadow.bg-base-100.rounded-box.w-52
+                li
+                    a(href="/") Accueil
+                li 
+                    a(href="/about") A propos 
+                li
+                    a(href="#") Lien 3
+                li
+                    a(href="#") Lien 4
         a(href="/").btn.btn-ghost.normal-case.text-xl #{title} 
-    nav.navbar-center.flex
+    div(class="lg:flex").navbar-center.hidden
         ul.menu.menu-horizontal.px-1
             li
                 a(href="/") Accueil
             li
-                a(href="#") Lien 2
+                a(href="/about") A propos
             li
                 a(href="#") Lien 3
             li
-                a(href="/about") A propos
+                a(href="#") Lien 4
     div.navbar-end
         a(href="/login").btn.btn-accent.mr-2 Connexion
         a(href="/signin").btn.btn-accent Inscription

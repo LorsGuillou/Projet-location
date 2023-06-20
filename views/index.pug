@@ -6,8 +6,10 @@ block content
         div#banner.mb-5
             h1.font-bold.text-3xl.underline.text-center.mb-5 Nom du site
             p.font-bold.text-1xl.text-center.mb-5 Le site de location dans les Monts d'Arrée
-        div#home-display.flex.flex-auto.mt-5.items-center.gap-4.mt-5.container
-            each item in data
-                +homeCard(item)
+        div#home-display
+            h2.font-bold.text-2xl.underline.text-center.mx-3 Dernières locations
+            div#last-locs.flex.flex-auto.items-center.mt-5.container.gap-5.justify-center.items-stretch
+                each item in data
+                    +homeCard(item)
 
 
