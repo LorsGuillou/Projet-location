@@ -1,9 +1,9 @@
-mixin homeCard(item)
+mixin card(item)
     div.card.w-96.bg-300.shadow-xl
         figure
             img(src="images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg")
         div.card-body
-            h2.card-title #{item.name}
-            p #{item.text}
+            h2.card-title= item.name
+            p= item.text
             div.card-actions.justify-end
-                button.btn.btn-primary Voir
+                a(href="/location/" + item.id).btn.btn-primary Voir

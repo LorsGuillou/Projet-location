@@ -1,3 +1,3 @@
 module.exports = {
-    secret: "super-secret-key"
+    secret: "secret-token-key"
 };

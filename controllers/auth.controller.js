@@ -25,17 +25,19 @@ exports.signup = (req, res) => {
                     }
                 }).then(roles => {
                     user.setRoles(roles).then(() => {
-                        res.send({
-                            message: "User was registered successfully!"
-                        });
+                        res.redirect("/successSignup");
+                        // res.send({
+                        //     message: "User was registered successfully!"
+                        // });
                     });
                 });
             } else {
                 // user role = 1
                 user.setRoles([1]).then(() => {
-                    res.send({
-                        message: "User was registered successfully!"
-                    });
+                    res.redirect("/successSignup");
+                    // res.send({
+                    //     message: "User was registered successfully!"
+                    // });     
                 });
             }
         })
@@ -49,7 +51,7 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
     User.findOne({
             where: {
-                username: req.body.username
+                email: req.body.email
             }
         })
         .then(user => {
@@ -82,13 +84,19 @@ exports.signin = (req, res) => {
                 for (let i = 0; i < roles.length; i++) {
                     authorities.push("ROLE_" + roles[i].name.toUpperCase());
                 }
-                res.status(200).send({
-                    id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    roles: authorities,
-                    accessToken: token
-                });
+                // res.status(200).send({
+                //     id: user.id,
+                //     username: user.username,
+                //     email: user.email,
+                //     roles: authorities,
+                //     accessToken: token
+                // });
+                req.session.id = user.id;
+                req.session.username = user.username;
+                req.session.email = user.email;
+                req.session.roles = authorities;
+                req.session.token = token;
+                res.redirect("/account");
             });
         })
         .catch(err => {
@@ -96,4 +104,9 @@ exports.signin = (req, res) => {
                 message: err.message
             });
         });
+};
+
+exports.signout = (req, res) => {
+    req.session.destroy();
+    res.redirect("/");
 };
