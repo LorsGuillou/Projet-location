@@ -2,11 +2,11 @@ extends layout
 
 block content
     h1.font-bold.text-3xl.underline.text-center.mb-5= title
-    div#alert.text-center.mb-5
-        if message
-            p.font-bold= message
-    div#signin-page.flex.flex-center.justify-center
-        form(action="/login", method="POST").bg-base-300.flex.flex-col.p-5.items-center
+    div#signup-page.flex.flex-center.justify-center
+        form(action="/signup", method="POST").bg-base-300.flex.flex-col.p-5.items-center
+            div.mb-5
+                label(for="username").block Pseudonyme :
+                input(type="text", name="username")#email
             div.mb-5
                 label(for="email").block Email :
                 input(type="email", name="email")#email.border.border-gray-300
@@ -14,4 +14,4 @@ block content
                 label(for="password").block Mot de passe :
                 input(type="password", name="password")#password.border.border-gray-300
             div
-                button(type="submit").btn.btn-primary Se connecter
+                button(type="submit").btn.btn-primary S'inscrire

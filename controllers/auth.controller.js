@@ -25,7 +25,7 @@ exports.signup = (req, res) => {
                     }
                 }).then(roles => {
                     user.setRoles(roles).then(() => {
-                        res.redirect("/successSignup");
+                        res.redirect("/registered");
                         // res.send({
                         //     message: "User was registered successfully!"
                         // });

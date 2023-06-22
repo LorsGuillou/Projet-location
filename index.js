@@ -33,15 +33,23 @@ app.use(session({
     saveUninitialized: false
 }));
 
+/**
+ * Middlewares
+ */
+
+const { authJwt } = require("./middleware");
+
+const { verifySignUp } = require("./middleware");
+
 app.use(sessionMiddleware);
 
 const db = require("./models");
 
 /**
- * Database configuration
+ * Database initialization
  */
 
-db.sequelize.sync();
+// db.sequelize.sync();
 
 /**
  * Initial role creation
@@ -75,14 +83,21 @@ app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, "public")));
 
 /**
- * API Routes
+ * Controllers
  */
 
-require('./routes/auth.routes')(app);
-require('./routes/user.routes')(app);
+const userController = require("./controllers/user.controller");
+const authController = require("./controllers/auth.controller");
+const locationController = require("./controllers/location.controller");
+const townController = require("./controllers/town.controller");
+const schoolController = require("./controllers/school.controller");
+const serviceController = require("./controllers/service.controller");
+const parkingController = require("./controllers/parking.controller");
+const heatingController = require("./controllers/heating.controller");
+const dpeController = require("./controllers/dpe.controller");
 
 /**
- * Front Routes
+ * Routes
  */
 
 // test json
@@ -103,6 +118,7 @@ const data = [{
     }
 ];
 
+// index
 app.get("/", (req, res) => {
     res.render("index", {
         title: "Accueil",
@@ -110,6 +126,7 @@ app.get("/", (req, res) => {
     });
 });
 
+// single location
 app.get("/location/:id", (req, res) => {
     var locationId = req.params.id;
     res.render("single", {
@@ -118,30 +135,47 @@ app.get("/location/:id", (req, res) => {
     });
 });
 
+
+// azbout
 app.get("/about", (req, res) => {
     res.render("about", {
         title: "A propos"
     });
 });
 
-app.get("/successSignup", (req, res) => {
-    res.render("signin", {
+// Signup, form action and redirection
+
+app.get("/register", (req, res) => {
+    res.render("register", {
+        title: "Inscription"
+    });
+});
+
+app.post("/signup", [
+        verifySignUp.checkDuplicateUsernameOrEmail,
+        verifySignUp.checkRolesExisted
+    ],
+    authController.signup
+);
+
+app.get("/registered", (req, res) => {
+    res.render("login", {
         title: "Connexion",
         message: "Inscription réussie ! Vous pouvez maintenant vous connecter !"
     });
 });
 
-app.get("/signin", (req, res) => {
-    res.render("signin", {
+// Login page, signin and signout methods
+
+app.get("/login", (req, res) => {
+    res.render("login", {
         title: "Connexion",
     });
 });
 
-app.get("/signup", (req, res) => {
-    res.render("signup", {
-        title: "Inscription"
-    });
-});
+app.post("/signin", authController.signin);
+
+app.get("/signout", authController.signout);
 
 app.get("/account", (req, res) => {
     if (!req.session.username) {
@@ -158,11 +192,6 @@ app.use((req, res, next) => {
         title: "Page non trouvée"
     });
 });
-
-/**
- * Actions
- */
-
 
 /**
  * Server Activation
