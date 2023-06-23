@@ -46,14 +46,9 @@ app.use(sessionMiddleware);
 const db = require("./models");
 
 /**
- * Database initialization
+ * Database initialization and initial role creation
  */
 
-// db.sequelize.sync();
-
-/**
- * Initial role creation
- */
 // const Role = db.role;
 // db.sequelize.sync({
 //     force: true
@@ -158,18 +153,14 @@ app.post("/signup", [
     authController.signup
 );
 
-app.get("/registered", (req, res) => {
-    res.render("login", {
-        title: "Connexion",
-        message: "Inscription réussie ! Vous pouvez maintenant vous connecter !"
-    });
-});
-
 // Login page, signin and signout methods
 
 app.get("/login", (req, res) => {
+    const message = req.session.message;
+    req.session.message = null;
     res.render("login", {
         title: "Connexion",
+        message: message
     });
 });
 
@@ -177,12 +168,15 @@ app.post("/signin", authController.signin);
 
 app.get("/signout", authController.signout);
 
-app.get("/account", (req, res) => {
-    if (!req.session.username) {
-        return res.redirect("/signin")
-    }
+app.get("/account", authJwt.verifyToken, authJwt.isUser, (req, res) => {
     res.render("account", {
         title: "Votre compte"
+    });
+});
+
+app.get("/dashboard", authJwt.verifyToken, authJwt.isAdmin, (req, res) => {
+    res.render("dashboard", {
+        title: "Administration"
     });
 });
 

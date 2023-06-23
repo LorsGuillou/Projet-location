@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const SchoolDistance = sequelize.define("schoolDistance", {
+    const SchoolDistance = sequelize.define("school_distance", {
         type: {
             type: Sequelize.FLOAT
         }

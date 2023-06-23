@@ -1,12 +1,18 @@
 module.exports = (sequelize, Sequelize) => {
     const Dpe = sequelize.define("dpe", {
-        consumption: {
+        minConsumption: {
             type: Sequelize.FLOAT
         },
-        emission: {
+        maxConsumption: {
             type: Sequelize.FLOAT
         },
-        note: {
+        minEmission: {
+            type: Sequelize.FLOAT
+        },
+        maxEmission: {
+            type: Sequelize.FLOAT
+        },
+        class: {
             type: Sequelize.STRING
         }
     });

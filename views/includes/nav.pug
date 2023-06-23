@@ -30,3 +30,6 @@ div.navbar
             a(href="/register").btn.btn-accent Inscription
         else 
             a(href="/signout").btn.btn-warning Déconnexion
+            - for (var i = 0; i <= 1; i++)
+                if roles[i] == "ROLE_ADMIN"
+                    a(href="/dashboard").btn.btn-warning.ml-2 Administration

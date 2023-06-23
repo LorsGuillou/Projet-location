@@ -21,6 +21,12 @@ module.exports = (sequelize, Sequelize) => {
         surface: {
             type: Sequelize.FLOAT
         },
+        consumption: {
+            type: Sequelize.FLOAT
+        },
+        emission: {
+            type: Sequelize.FLOAT
+        },
         details: {
             type: Sequelize.TEXT
         }

@@ -3,7 +3,7 @@ extends layout
 block content
     h1.font-bold.text-3xl.underline.text-center.mb-5= title
     div#signup-page.flex.flex-center.justify-center
-        form(action="/signup", method="POST").bg-base-300.flex.flex-col.p-5.items-center
+        form(action="/signup", method="POST").bg-base-300.flex.flex-col.p-5
             div.mb-5
                 label(for="username").block Pseudonyme :
                 input(type="text", name="username")#email

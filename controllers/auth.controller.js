@@ -25,19 +25,15 @@ exports.signup = (req, res) => {
                     }
                 }).then(roles => {
                     user.setRoles(roles).then(() => {
-                        res.redirect("/registered");
-                        // res.send({
-                        //     message: "User was registered successfully!"
-                        // });
+                        req.session.message = "Votre compte a été créé ! Vous pouvez maintenant vous connecter !"
+                        res.redirect("/login");
                     });
                 });
             } else {
                 // user role = 1
                 user.setRoles([1]).then(() => {
-                    res.redirect("/successSignup");
-                    // res.send({
-                    //     message: "User was registered successfully!"
-                    // });     
+                    req.session.message = "Votre compte a été créé ! Vous pouvez maintenant vous connecter !";
+                    res.redirect("/login");   
                 });
             }
         })
@@ -56,9 +52,8 @@ exports.signin = (req, res) => {
         })
         .then(user => {
             if (!user) {
-                return res.status(404).send({
-                    message: "User Not found."
-                });
+                req.session.message = "Les identifiants fournis ne correspondent à aucun utilisateur.";
+                return res.redirect("/login");
             }
 
             var passwordIsValid = bcrypt.compareSync(
@@ -67,10 +62,8 @@ exports.signin = (req, res) => {
             );
 
             if (!passwordIsValid) {
-                return res.status(401).send({
-                    accessToken: null,
-                    message: "Invalid Password!"
-                });
+                req.session.message = "Mot de passe incorrect.";
+                return res.redirect("/login");
             }
 
             var token = jwt.sign({
@@ -84,19 +77,12 @@ exports.signin = (req, res) => {
                 for (let i = 0; i < roles.length; i++) {
                     authorities.push("ROLE_" + roles[i].name.toUpperCase());
                 }
-                // res.status(200).send({
-                //     id: user.id,
-                //     username: user.username,
-                //     email: user.email,
-                //     roles: authorities,
-                //     accessToken: token
-                // });
                 req.session.id = user.id;
                 req.session.username = user.username;
                 req.session.email = user.email;
                 req.session.roles = authorities;
                 req.session.token = token;
-                res.redirect("/account");
+                return res.redirect("/account");
             });
         })
         .catch(err => {
