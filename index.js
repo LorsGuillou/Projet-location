@@ -81,7 +81,6 @@ app.use(express.static(path.join(__dirname, "public")));
  * Controllers
  */
 
-const userController = require("./controllers/user.controller");
 const authController = require("./controllers/auth.controller");
 const locationController = require("./controllers/location.controller");
 const townController = require("./controllers/town.controller");
