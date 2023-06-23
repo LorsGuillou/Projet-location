@@ -23,22 +23,6 @@ verifyToken = (req, res, next) => {
     });
 };
 
-// isUser = (req, res, next) => {
-//     User.findByPk(req.userId).then(user => {
-//         user.getRoles().then(roles => {
-//             for (let i = 0; i < roles.length; i++) {
-//                 if (roles[i].name === "user") {
-//                     next();
-//                     return;
-//                 }
-//             }
-//             req.session.message = "La page à laquelle vous avez tenter d'accéder requiert d'être connecté."
-//             res.redirect("/login");
-//             return;
-//         });
-//     });
-// };
-
 isUser = async (req, res, next) => {
     try {
         const user = await User.findByPk(req.userId);
@@ -77,21 +61,6 @@ isAdmin = async (req, res, next) => {
         });
     }
 };
-
-// isAdmin = (req, res, next) => {
-//     User.findByPk(req.userId).then(user => {
-//         user.getRoles().then(roles => {
-//             for (let i = 0; i < roles.length; i++) {
-//                 if (roles[i].name === "admin") {
-//                     next();
-//                     return;
-//                 }
-//             }
-//             res.redirect("/");
-//             return;
-//         });
-//     });
-// };
 
 const authJwt = {
     verifyToken: verifyToken,

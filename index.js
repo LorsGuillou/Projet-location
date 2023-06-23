@@ -6,7 +6,6 @@ const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
 const path = require("path");
-const sessionMiddleware = require('./middleware/sessionMiddleware');
 
 /**
  * App Variables
@@ -14,8 +13,8 @@ const sessionMiddleware = require('./middleware/sessionMiddleware');
 
 const app = express();
 var corsOptions = {
-    origin: "http://localhost:8001"
-}
+    origin: "http://localhost:8001",
+};
 
 app.use(cors(corsOptions));
 
@@ -23,23 +22,27 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({
-    extended: true
-}));
+app.use(
+    express.urlencoded({
+        extended: true,
+    })
+);
 
-app.use(session({
-    secret: "secret-session-key",
-    resave: false,
-    saveUninitialized: false
-}));
+app.use(
+    session({
+        secret: "secret-session-key",
+        resave: false,
+        saveUninitialized: false,
+    })
+);
 
 /**
  * Middlewares
  */
 
 const { authJwt } = require("./middleware");
-
 const { verifySignUp } = require("./middleware");
+const sessionMiddleware = require("./middleware/sessionMiddleware");
 
 app.use(sessionMiddleware);
 
@@ -82,6 +85,7 @@ app.use(express.static(path.join(__dirname, "public")));
  */
 
 const authController = require("./controllers/auth.controller");
+const housingController = require("./controllers/housing.controller");
 const locationController = require("./controllers/location.controller");
 const townController = require("./controllers/town.controller");
 const schoolController = require("./controllers/school.controller");
@@ -95,28 +99,29 @@ const dpeController = require("./controllers/dpe.controller");
  */
 
 // test json
-const data = [{
-        id: '1',
-        name: 'Test 1',
-        text: 'Ceci est le 1er test'
+const data = [
+    {
+        id: "1",
+        name: "Test 1",
+        text: "Ceci est le 1er test",
     },
     {
-        id: '2',
-        name: 'Test 2',
-        text: 'Ceci est le 2ème test'
+        id: "2",
+        name: "Test 2",
+        text: "Ceci est le 2ème test",
     },
     {
-        id: '3',
-        name: 'Test 3',
-        text: 'Ceci est le 3ème test'
-    }
+        id: "3",
+        name: "Test 3",
+        text: "Ceci est le 3ème test",
+    },
 ];
 
 // index
 app.get("/", (req, res) => {
     res.render("index", {
         title: "Accueil",
-        data
+        data,
     });
 });
 
@@ -125,15 +130,14 @@ app.get("/location/:id", (req, res) => {
     var locationId = req.params.id;
     res.render("single", {
         title: "Location",
-        item: data[locationId]
+        item: data[locationId],
     });
 });
 
-
-// azbout
+// about
 app.get("/about", (req, res) => {
     res.render("about", {
-        title: "A propos"
+        title: "A propos",
     });
 });
 
@@ -141,14 +145,13 @@ app.get("/about", (req, res) => {
 
 app.get("/register", (req, res) => {
     res.render("register", {
-        title: "Inscription"
+        title: "Inscription",
     });
 });
 
-app.post("/signup", [
-        verifySignUp.checkDuplicateUsernameOrEmail,
-        verifySignUp.checkRolesExisted
-    ],
+app.post(
+    "/signup",
+    [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRolesExisted],
     authController.signup
 );
 
@@ -159,7 +162,7 @@ app.get("/login", (req, res) => {
     req.session.message = null;
     res.render("login", {
         title: "Connexion",
-        message: message
+        message,
     });
 });
 
@@ -169,20 +172,27 @@ app.get("/signout", authController.signout);
 
 app.get("/account", authJwt.verifyToken, authJwt.isUser, (req, res) => {
     res.render("account", {
-        title: "Votre compte"
+        title: "Votre compte",
     });
 });
 
 app.get("/dashboard", authJwt.verifyToken, authJwt.isAdmin, (req, res) => {
     res.render("dashboard", {
-        title: "Administration"
+        title: "Administration",
     });
 });
 
+app.get("/test", housingController.findAllPublished);
+
+// authJwt.verifyToken, authJwt.isAdmin,
+app.get("/housing/create",  housingController.createView);
+
+app.post("/housing/create", housingController.create);
+
 // 404
 app.use((req, res, next) => {
-    res.status(404).render('404', {
-        title: "Page non trouvée"
+    res.status(404).render("404", {
+        title: "Page non trouvée",
     });
 });
 

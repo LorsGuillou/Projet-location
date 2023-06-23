@@ -29,7 +29,8 @@ div.navbar
             a(href="/login").btn.btn-accent.mr-2 Connexion
             a(href="/register").btn.btn-accent Inscription
         else 
-            a(href="/signout").btn.btn-warning Déconnexion
             - for (var i = 0; i <= 1; i++)
                 if roles[i] == "ROLE_ADMIN"
-                    a(href="/dashboard").btn.btn-warning.ml-2 Administration
+                    a(href="/dashboard").btn.btn-warning Administration
+            a(href="/account").btn.btn-warning.ml-2 Compte
+            a(href="/signout").btn.btn-warning.ml-2 Déconnexion

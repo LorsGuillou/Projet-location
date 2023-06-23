@@ -1,0 +1,47 @@
+extends layout 
+
+block content
+    h1.font-bold.text-3xl.underline.text-center.mb-5= message
+    div#houseForm.flex.flex-center.justify-center
+        form(action="/housing/create", method="POST").bg-base-300.flex.flex-col.p-5.items-center
+            div.mb-5
+                label(for="name").block Nom
+                input(type="text" name="name")
+            div.mb-5
+                label(for="code").block Code
+                input(type="text" name="code")
+            div.mb-5
+                label(for="rent").block Loyer
+                input(type="text" name="rent")
+            div.mb-5
+                label(for="address").block Adresse
+                input(type="text" name="address")
+            div.mb-5
+                label(for="room").block Nombre de pièces
+                input(type="text" name="room")
+            div.mb-5
+                label(for="bedroom").block Nombre de chambres
+                input(type="text" name="bedroom")
+            div.mb-5
+                label(for="bathroom").block Nombre de salles de bains
+                input(type="text" name="bathroom")
+            div.mb-5
+                label(for="heating").block Chauffage (Ctrl + click)
+                select(name="heatings" multiple).select.w-full.max-w-xs
+                    each heating in heatings
+                        option(value=heating.id)= heating.type
+            div.mb-5
+                label(for="surface").block Surface
+                input(type="text" name="surface")
+            div.mb-5
+                label(for="consumption").block Consommation
+                input(type="text" name="consumption")
+            div.mb-5
+                label(for="emission").block Emission
+                input(type="text" name="emission")
+            div.mb-5
+                label(for="details").block Détails
+                textarea(name="details")
+            div
+                button(stype="submit").btn.btn-primary Ajouter
+
