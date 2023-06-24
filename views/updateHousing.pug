@@ -3,56 +3,55 @@ extends layout
 block content
     h1.font-bold.text-3xl.underline.text-center.mb-5 Ajouter un nouvel logement à la location
     h2.font-bold.text-2xl.text-center.mb-5= message
-    div#create-house-form.flex.flex-center.justify-center
-        form(action="/housing/create", method="POST").bg-base-300.flex.flex-col.p-5.items-center
+    div#update-house-form.flex.flex-center.justify-center
+        form(action="/housing/update/" + housing.id, method="POST").bg-base-300.flex.flex-col.p-5.items-center
             div.mb-5
                 label(for="name").block Nom
-                input(type="text" name="name")
+                input(type="text" name="name" value=housing.name)
             div.mb-5
                 label(for="code").block Code
-                input(type="text" name="code")
+                input(type="text" name="code" value=housing.code)
             div.mb-5
                 label(for="rent").block Loyer
-                input(type="text" name="rent")
+                input(type="text" name="rent" value=housing.rent)
             div.mb-5
                 label(for="address").block Adresse
-                input(type="text" name="address")
+                input(type="text" name="address" value=housing.address)
             div.mb-5
                 label(for="town").block Commune
                 select(name="town").select.w-full.max-w-xs
                     each town in towns
-                        option(value=town.id)= town.name
+                        option(value=town.id selected=housing.townId === town.id ? true : false )= town.name 
             div.mb-5
                 label(for="room").block Nombre de pièces
-                input(type="number" name="room" min=1)
+                input(type="number" name="room" min=1 value=housing.room)
             div.mb-5
                 label(for="bedroom").block Nombre de chambres
-                input(type="number" name="bedroom" min=1)
+                input(type="number" name="bedroom" min=1 value=housing.bedroom)
             div.mb-5
                 label(for="bathroom").block Nombre de salles de bains
-                input(type="number" name="bathroom" min=1)
+                input(type="number" name="bathroom" min=1 value=housing.bathroom)
             div.mb-5
                 label(for="heatings").block Chauffage (Ctrl + click)
                 select(name="heatings" multiple).select.w-full.max-w-xs
                     each heating in heatings
-                        option(value=heating.id)= heating.type
+                        option(value=heating.id selected=housing.heatings.some((h) => h.id === heating.id))= heating.type
             div.mb-5
                 label(for="parkings").block Parking (Ctrl + click)
                 select(name="parkings" multiple).select.w-full.max-w-xs
                     each parking in parkings
-                        option(value=parking.id)= parking.type
+                        option(value=parking.id selected=housing.parkings.some((p) => p.id === parking.id))= parking.type
             div.mb-5
                 label(for="surface").block Surface
-                input(type="text" name="surface")
+                input(type="text" name="surface" value=housing.surface)
             div.mb-5
                 label(for="consumption").block Consommation
-                input(type="number" name="consumption")
+                input(type="number" name="consumption" value=housing.consumption)
             div.mb-5
                 label(for="emission").block Emission
-                input(type="number" name="emission")
+                input(type="number" name="emission" value=housing.emission)
             div.mb-5
                 label(for="details").block Détails
-                textarea(name="details")
+                textarea(name="details" value=housing.detail)
             div
-                button(stype="submit").btn.btn-primary Ajouter
-
+                button(type="submit").btn.btn-primary Modifier

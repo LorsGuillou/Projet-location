@@ -87,44 +87,39 @@ app.use(express.static(path.join(__dirname, "public")));
 const authController = require("./controllers/auth.controller");
 const housingController = require("./controllers/housing.controller");
 const locationController = require("./controllers/location.controller");
-const townController = require("./controllers/town.controller");
-const parkingController = require("./controllers/parking.controller");
-const heatingController = require("./controllers/heating.controller");
-const dpeController = require("./controllers/dpe.controller");
 
 /**
  * Routes
  */
 
 // test json
-const data = [
-    {
-        id: "1",
-        name: "Test 1",
-        text: "Ceci est le 1er test",
-    },
-    {
-        id: "2",
-        name: "Test 2",
-        text: "Ceci est le 2ème test",
-    },
-    {
-        id: "3",
-        name: "Test 3",
-        text: "Ceci est le 3ème test",
-    },
-];
+// const data = [
+//     {
+//         id: "1",
+//         name: "Test 1",
+//         text: "Ceci est le 1er test",
+//     },
+//     {
+//         id: "2",
+//         name: "Test 2",
+//         text: "Ceci est le 2ème test",
+//     },
+//     {
+//         id: "3",
+//         name: "Test 3",
+//         text: "Ceci est le 3ème test",
+//     },
+// ];
 
 // index
 app.get("/", (req, res) => {
     res.render("index", {
         title: "Accueil",
-        data,
     });
 });
 
 // all locations
-app.get("location/all", (req, res) => {
+app.get("/location/all", (req, res) => {
     res.render("all", {
         title: "Les logements"
     })
@@ -189,12 +184,16 @@ app.get("/dashboard", authJwt.verifyToken, authJwt.isAdmin, (req, res) => {
     });
 });
 
-app.get("/test", housingController.findAllPublished);
-
 // authJwt.verifyToken, authJwt.isAdmin,
+app.get("/housing/all", housingController.viewAll);
+
 app.get("/housing/create",  housingController.createView);
 
 app.post("/housing/create", housingController.create);
+
+app.get("/housing/update/:id", housingController.updateView);
+
+app.post("/housing/update/:id", housingController.update);
 
 // 404
 app.use((req, res, next) => {

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./index.js",
+    "dev": "nodemon --inspect ./index.js",
+    "create:db": "node ./public/scripts/createDB.js",
     "ui": "browser-sync start --config bs-config.js",
     "build:css": "postcss tailwind.css -o ./public/stylesheets/tailwind.css"
   },
