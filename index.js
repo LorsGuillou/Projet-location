@@ -88,8 +88,6 @@ const authController = require("./controllers/auth.controller");
 const housingController = require("./controllers/housing.controller");
 const locationController = require("./controllers/location.controller");
 const townController = require("./controllers/town.controller");
-const schoolController = require("./controllers/school.controller");
-const serviceController = require("./controllers/service.controller");
 const parkingController = require("./controllers/parking.controller");
 const heatingController = require("./controllers/heating.controller");
 const dpeController = require("./controllers/dpe.controller");
@@ -125,14 +123,23 @@ app.get("/", (req, res) => {
     });
 });
 
+// all locations
+app.get("location/all", (req, res) => {
+    res.render("all", {
+        title: "Les logements"
+    })
+});
+
 // single location
 app.get("/location/:id", (req, res) => {
     var locationId = req.params.id;
     res.render("single", {
-        title: "Location",
+        title: data[locationId][text],
         item: data[locationId],
     });
 });
+
+
 
 // about
 app.get("/about", (req, res) => {

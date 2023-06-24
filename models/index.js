@@ -27,10 +27,6 @@ db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.housing = require("../models/housing.model.js")(sequelize, Sequelize);
 db.location = require("../models/location.model.js")(sequelize, Sequelize);
 db.town = require("../models/town.model.js")(sequelize, Sequelize);
-db.school = require("../models/school.model.js")(sequelize, Sequelize);
-db.schoolDistance = require("../models/schoolDistance.model.js")(sequelize, Sequelize);
-db.service = require("../models/service.model.js")(sequelize, Sequelize);
-db.serviceDistance = require("../models/serviceDistance.model.js")(sequelize, Sequelize);
 db.parking = require("../models/parking.model.js")(sequelize, Sequelize);
 db.heating = require("../models/heating.model.js")(sequelize, Sequelize);
 db.dpe = require("../models/dpe.model.js")(sequelize, Sequelize);
@@ -72,34 +68,6 @@ db.housing.belongsTo(db.town, {
 });
 
 db.town.hasMany(db.housing);
-
-// Housing / School relation
-
-db.housing.belongsToMany(db.school, {
-    through: db.schoolDistance,
-    foreignKey: "housingId",
-    otherKey: "schoolId"
-});
-
-db.school.belongsToMany(db.housing, {
-    through: db.schoolDistance,
-    foreignKey: "schoolId",
-    otherKey: "housingId"
-});
-
-// Housing / Services relation
-
-db.housing.belongsToMany(db.service, {
-    through: db.serviceDistance,
-    foreignKey: "housingId",
-    otherKey: "serviceId"
-});
-
-db.service.belongsToMany(db.housing, {
-    through: db.serviceDistance,
-    foreignKey: "serviceId",
-    otherKey: "housingId"
-});
 
 // Housing / Parking relation
 

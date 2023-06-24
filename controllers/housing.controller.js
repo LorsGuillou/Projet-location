@@ -1,12 +1,17 @@
 const db = require("../models");
-const { findAllHeatings } = require("../services/heating.services");
+const { findOneDPE, findOneDPEbyValues } = require("../services/dpe.service");
+const { findAllHeatings } = require("../services/heating.service");
+const { findAllParkings } = require("../services/parking.service");
+const { findAllTowns } = require("../services/town.service");
 const Housing = db.housing;
 const Op = db.Sequelize.Op;
 
 exports.createView = async (req, res) => {
     res.render("addHousing", {
-        title: "Créer une nouvelle location",
+        title: "Créer un nouvel article",
+        towns: await findAllTowns(),
         heatings: await findAllHeatings(),
+        parkings: await findAllParkings(),
         message: req.query.message
     });
 };
@@ -23,25 +28,31 @@ exports.create = async (req, res) => {
     // Create a new housing object
 
     const heatings = req.body.heatings;
+    const parkings = req.body.parkings;
+    const diagnostic = await findOneDPEbyValues(req.body.consumption, req.body.emission);
+    console.log(diagnostic);
 
     const housing = {
         name: req.body.name,
         code: req.body.code,
         rent: req.body.rent,
         address: req.body.address,
+        townId: req.body.town,
         room: req.body.room,
         bedroom: req.body.bedroom,
         bathroom: req.body.bathroom,
         surface: req.body.surface,
         consumption: req.body.consumption,
         emission: req.body.emission,
+        dpeId: diagnostic.id,
         details: req.body.details,
     };
 
     // Save Housing in the database
     const createdHousing = await Housing.create(housing);
     await createdHousing.addHeatings(heatings);
-    return res.redirect("/housing/create?message=bravo");
+    await createdHousing.addParkings(parkings);
+    return res.redirect("/housing/create?message=Success");
 };
 
 exports.findAll = (req, res) => {
@@ -145,17 +156,10 @@ exports.deleteAll = (req, res) => {
 
 
 
-exports.findAllPublished = (req, res) => {
+exports.findAllPublished = async () => {
     Housing.findAll({
         where: {},
-        include: [db.heating]
-    })
-        .then((data) => {
-            res.send(data);
-        })
-        .catch((err) => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving housings.",
-            });
-        });
+        include: [db.heating],
+        include: [db.parking]
+    });
 };

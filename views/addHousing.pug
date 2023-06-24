@@ -1,7 +1,8 @@
 extends layout 
 
 block content
-    h1.font-bold.text-3xl.underline.text-center.mb-5= message
+    h1.font-bold.text-3xl.underline.text-center.mb-5 Ajouter un nouvel logement à la location
+    h2.font-bold.text-2xl.text-center.mb-5= message
     div#houseForm.flex.flex-center.justify-center
         form(action="/housing/create", method="POST").bg-base-300.flex.flex-col.p-5.items-center
             div.mb-5
@@ -17,28 +18,38 @@ block content
                 label(for="address").block Adresse
                 input(type="text" name="address")
             div.mb-5
+                label(for="town").block Commune
+                select(name="town").select.w-full.max-w-xs
+                    each town in towns
+                        option(value=town.id)= town.name
+            div.mb-5
                 label(for="room").block Nombre de pièces
-                input(type="text" name="room")
+                input(type="number" name="room" min=1)
             div.mb-5
                 label(for="bedroom").block Nombre de chambres
-                input(type="text" name="bedroom")
+                input(type="number" name="bedroom" min=1)
             div.mb-5
                 label(for="bathroom").block Nombre de salles de bains
-                input(type="text" name="bathroom")
+                input(type="number" name="bathroom" min=1)
             div.mb-5
-                label(for="heating").block Chauffage (Ctrl + click)
+                label(for="heatings").block Chauffage (Ctrl + click)
                 select(name="heatings" multiple).select.w-full.max-w-xs
                     each heating in heatings
                         option(value=heating.id)= heating.type
+            div.mb-5
+                label(for="parkings").block Parking (Ctrl + click)
+                select(name="parkings" multiple).select.w-full.max-w-xs
+                    each parking in parkings
+                        option(value=parking.id)= parking.type
             div.mb-5
                 label(for="surface").block Surface
                 input(type="text" name="surface")
             div.mb-5
                 label(for="consumption").block Consommation
-                input(type="text" name="consumption")
+                input(type="number" name="consumption")
             div.mb-5
                 label(for="emission").block Emission
-                input(type="text" name="emission")
+                input(type="number" name="emission")
             div.mb-5
                 label(for="details").block Détails
                 textarea(name="details")
