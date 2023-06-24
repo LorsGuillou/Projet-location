@@ -46,32 +46,6 @@ const sessionMiddleware = require("./middleware/sessionMiddleware");
 
 app.use(sessionMiddleware);
 
-const db = require("./models");
-
-/**
- * Database initialization and initial role creation
- */
-
-// const Role = db.role;
-// db.sequelize.sync({
-//     force: true
-// }).then(() => {
-//     console.log('Drop and Resync Db');
-//     initial();
-// });
-
-// function initial() {
-//     Role.create({
-//         id: 1,
-//         name: "user"
-//     });
-
-//     Role.create({
-//         id: 2,
-//         name: "admin"
-//     });
-// }
-
 /**
  *  App Configuration
  */
@@ -86,30 +60,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const authController = require("./controllers/auth.controller");
 const housingController = require("./controllers/housing.controller");
-const locationController = require("./controllers/location.controller");
+const locationController = require("./controllers/renting.controller");
 
 /**
  * Routes
  */
-
-// test json
-// const data = [
-//     {
-//         id: "1",
-//         name: "Test 1",
-//         text: "Ceci est le 1er test",
-//     },
-//     {
-//         id: "2",
-//         name: "Test 2",
-//         text: "Ceci est le 2ème test",
-//     },
-//     {
-//         id: "3",
-//         name: "Test 3",
-//         text: "Ceci est le 3ème test",
-//     },
-// ];
 
 // index
 app.get("/", (req, res) => {
@@ -210,7 +165,3 @@ const port = process.env.PORT || "8000";
 app.listen(port, () => {
     console.log(`Listening to requests on http://localhost:${port}`);
 });
-
-/**
- * Database configuration
- */

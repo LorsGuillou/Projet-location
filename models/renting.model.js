@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Location = sequelize.define("location", {
+    const Location = sequelize.define("renting", {
         start: {
             type: Sequelize.DATEONLY
         },

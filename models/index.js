@@ -25,7 +25,7 @@ db.sequelize = sequelize;
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.housing = require("../models/housing.model.js")(sequelize, Sequelize);
-db.location = require("../models/location.model.js")(sequelize, Sequelize);
+db.renting = require("./renting.model.js")(sequelize, Sequelize);
 db.town = require("../models/town.model.js")(sequelize, Sequelize);
 db.parking = require("../models/parking.model.js")(sequelize, Sequelize);
 db.heating = require("../models/heating.model.js")(sequelize, Sequelize);
@@ -45,18 +45,16 @@ db.user.belongsToMany(db.role, {
     otherKey: "roleId"
 });
 
-db.ROLES = ["user", "admin"];
-
 // User / Housing relation
 
 db.user.belongsToMany(db.housing, {
-    through: db.location,
+    through: db.renting,
     foreignKey: "userId",
     otherKey: "housingId"
 });
 
 db.housing.belongsToMany(db.user, {
-    through: db.location,
+    through: db.renting,
     foreignKey: "housingId",
     otherKey: "userId"
 });

@@ -38,9 +38,11 @@ exports.create = async (req, res) => {
     };
 
     // Save Housing in the database
-    const createdHousing = await Housing.create(housing);
-    await createdHousing.addHeatings(req.body.heatings ?? []);
-    await createdHousing.addParkings(req.body.parkings ?? []);
+    await db.sequelize.transaction(async (transaction) => {
+        const createdHousing = await Housing.create(housing, { transaction });
+        await createdHousing.addHeatings(req.body.heatings ?? [], { transaction });
+        await createdHousing.addParkings(req.body.parkings ?? [], { transaction });
+    });
     return res.redirect("/housing/create?message=Success");
 };
 
@@ -77,6 +79,7 @@ exports.update = async (req, res) => {
         details: req.body.details,
     };
 
+    // Update Housing in the database
     await db.sequelize.transaction(async (transaction) => {
         await oldHousing.update(housing, { transaction });
         await oldHousing.removeHeatings(oldHousing.heatings, { transaction });
@@ -85,6 +88,13 @@ exports.update = async (req, res) => {
         await oldHousing.addParkings(req.body.parkings ?? [], { transaction });
     });
     return res.redirect("/housing/update/" + id + "?message=Success");
+};
+
+exports.deleteHousing = async (req, res) => {
+    const id = req.params.id;
+    await db.sequelize.transaction(async (transaction) => {
+        await Housing.destroy({ where: { id: id }}, { transaction });
+    });
 };
 
 exports.viewAll = async (req, res) => {
