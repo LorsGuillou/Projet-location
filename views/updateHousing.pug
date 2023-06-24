@@ -52,6 +52,6 @@ block content
                 input(type="number" name="emission" value=housing.emission)
             div.mb-5
                 label(for="details").block Détails
-                textarea(name="details" value=housing.detail)
+                textarea(name="details")= housing.details
             div
                 button(type="submit").btn.btn-primary Modifier

@@ -1,11 +1,29 @@
 const db = require("../models");
 const { findOneDPE, findOneDPEbyValues } = require("../services/dpe.service");
 const { findAllHeatings } = require("../services/heating.service");
-const { findOneHousing } = require("../services/housing.service");
+const { findOneHousing, findAllHousing, findAllRecent } = require("../services/housing.service");
 const { findAllParkings } = require("../services/parking.service");
 const { findAllTowns } = require("../services/town.service");
 const Housing = db.housing;
 const Op = db.Sequelize.Op;
+
+exports.welcomeView = async (req, res) => {
+    res.render("index", {
+        title: "Accueil",
+        housings: await findAllRecent()
+    });
+};
+
+exports.allView = async (req, res) => {
+    res.render("allCards", {
+        title: "Les locations",
+        housings: await findAllHousing()
+    });
+};
+
+exports.singleView = async (req, res) => {
+
+}
 
 exports.createView = async (req, res) => {
     res.render("addHousing", {
@@ -100,6 +118,6 @@ exports.deleteHousing = async (req, res) => {
 exports.viewAll = async (req, res) => {
     res.render("allHousing", {
         title: "Tableau des locations",
-        housings: this.findAllHousing(),
+        housings: await findAllHousing(),
     });
 };

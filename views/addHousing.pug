@@ -1,7 +1,7 @@
 extends layout 
 
 block content
-    h1.font-bold.text-3xl.underline.text-center.mb-5 Ajouter un nouvel logement à la location
+    h1.font-bold.text-3xl.underline.text-center.mb-5 Ajouter un nouveau logement à la location
     h2.font-bold.text-2xl.text-center.mb-5= message
     div#create-house-form.flex.flex-center.justify-center
         form(action="/housing/create", method="POST").bg-base-300.flex.flex-col.p-5.items-center
@@ -42,13 +42,13 @@ block content
                     each parking in parkings
                         option(value=parking.id)= parking.type
             div.mb-5
-                label(for="surface").block Surface
+                label(for="surface").block Surface (en m²)
                 input(type="text" name="surface")
             div.mb-5
-                label(for="consumption").block Consommation
+                label(for="consumption").block Consommation (KWh/m² an)
                 input(type="number" name="consumption")
             div.mb-5
-                label(for="emission").block Emission
+                label(for="emission").block Emission (kg CO2/m² an)
                 input(type="number" name="emission")
             div.mb-5
                 label(for="details").block Détails

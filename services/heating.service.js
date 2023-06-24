@@ -1,8 +1,6 @@
 const db = require("../models");
-const Heating = db.heating;
 
 exports.findAllHeatings = async () => {
-    return Heating.findAll({
-        where: {}
-    });
+    const result = await db.heating.findAll();
+    return result;
 };

@@ -18,6 +18,9 @@ module.exports = (sequelize, Sequelize) => {
         bedroom: {
             type: Sequelize.INTEGER
         },
+        bathroom: {
+            type: Sequelize.INTEGER
+        },
         surface: {
             type: Sequelize.FLOAT
         },

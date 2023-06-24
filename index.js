@@ -60,25 +60,20 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const authController = require("./controllers/auth.controller");
 const housingController = require("./controllers/housing.controller");
+const housingService = require("./services/housing.service");
 const locationController = require("./controllers/renting.controller");
+
+const housings = housingService.findAllHousing();
 
 /**
  * Routes
  */
 
 // index
-app.get("/", (req, res) => {
-    res.render("index", {
-        title: "Accueil",
-    });
-});
+app.get("/", housingController.welcomeView);
 
 // all locations
-app.get("/location/all", (req, res) => {
-    res.render("all", {
-        title: "Les logements"
-    })
-});
+app.get("/location/all", housingController.allView);
 
 // single location
 app.get("/location/:id", (req, res) => {

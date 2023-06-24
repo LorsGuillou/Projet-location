@@ -1,15 +1,24 @@
 const db = require("../models");
 
-
 exports.findOneHousing = async (id) => {
-    return db.housing.findByPk(id, {
+    const result = await db.housing.findByPk(id, {
         include: [db.heating, db.parking],
     });
+    return result;
 };
 
 exports.findAllHousing = async () => {
-    return db.housing.findAll({
-        where: {},
+    const result = await db.housing.findAll({
         include: [db.heating, db.parking],
     });
+    return result;
+};
+
+exports.findAllRecent = async () => {
+    const result = await db.housing.findAll({
+        limit: 3,
+        order: [["createdAt", "DESC"]],
+        include: [db.heating, db.parking],
+    });
+    return result;
 };

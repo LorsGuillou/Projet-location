@@ -10,6 +10,7 @@ async function run() {
     await createAdmin(roleMap);
     await createTowns();
     await createHeatings();
+    await createParkings();
     await createDPEs();
 
     async function createRoles() {
@@ -54,6 +55,15 @@ async function run() {
         });
         await db.heating.create({
             type: "Electrique"
+        });
+    }
+
+    async function createParkings() {
+        await db.parking.create({
+            type: "Parking"
+        });
+        await db.parking.create({
+            type: "Garage"
         });
     }
 

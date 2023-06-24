@@ -3,7 +3,7 @@ const Dpe = db.dpe;
 const Op = db.Sequelize.Op;
 
 exports.findOneDPEbyValues = async (consumption, emission) => {
-    return Dpe.findOne({
+    const result = await Dpe.findOne({
         where: {
             minConsumption: {
                 [Op.lte]: consumption
@@ -19,8 +19,10 @@ exports.findOneDPEbyValues = async (consumption, emission) => {
             }
         }
     });
+    return result;
 }
 
 exports.findOneDPEId = async (id) => {
-    return Dpe.findByPk(id);
+    const result = await Dpe.findByPk(id);
+    return result;
 }
