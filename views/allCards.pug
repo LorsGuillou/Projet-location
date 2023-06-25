@@ -4,5 +4,5 @@ include mixins/card.pug
 block content
     h1.font-bold.text-3xl.underline.text-center.mb-5 Tout les logements 
     div#all-display.flex.flex-auto.items-center.mt-5.container.gap-5.justify-center.items-stretch
-        each item in data
-            +card(item)
+        each housing in housings
+            +card(housing)

@@ -1,7 +1,11 @@
 const db = require("../models");
-const Town = db.town;
 
 exports.findAllTowns = async () => {
     const result = await db.town.findAll();
     return result;
 };
+
+exports.findOneTown = async (id) => {
+    const result = await db.town.findByPk(id);
+    return result;
+}

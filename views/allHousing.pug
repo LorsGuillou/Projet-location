@@ -1,0 +1,16 @@
+extends layout 
+
+block content 
+    h1= message
+    table
+        tr 
+            th Nom
+            th Code
+            th Actions
+        if (housings) 
+            each housing in housings 
+                tr
+                    th= housing.name
+                    th= housing.code 
+                    th 
+                        a(href="/dashboard/housing/delete/" + housing.id).btn.btn-warning Effacer

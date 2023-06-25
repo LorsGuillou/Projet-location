@@ -1,29 +1,40 @@
 const db = require("../models");
-const { findOneDPE, findOneDPEbyValues } = require("../services/dpe.service");
+const { findOneDPEbyValues } = require("../services/dpe.service");
 const { findAllHeatings } = require("../services/heating.service");
 const { findOneHousing, findAllHousing, findAllRecent } = require("../services/housing.service");
 const { findAllParkings } = require("../services/parking.service");
 const { findAllTowns } = require("../services/town.service");
-const Housing = db.housing;
-const Op = db.Sequelize.Op;
 
 exports.welcomeView = async (req, res) => {
     res.render("index", {
+        housings: await findAllRecent(),
         title: "Accueil",
-        housings: await findAllRecent()
     });
 };
 
-exports.allView = async (req, res) => {
+exports.allViewFront = async (req, res) => {
     res.render("allCards", {
+        housings: await findAllHousing(),
         title: "Les locations",
-        housings: await findAllHousing()
+    });
+};
+
+exports.allViewBack = async (req, res) => {
+    res.render("allHousing", {
+        housings: await findAllHousing(),
+        title: "Tableau des locations",
+        message: req.query.message,
     });
 };
 
 exports.singleView = async (req, res) => {
-
-}
+    const id = req.params.id;
+    const housing = await findOneHousing(id);
+    res.render("single", {
+        housing,
+        title: housing.name
+    });
+};
 
 exports.createView = async (req, res) => {
     res.render("addHousing", {
@@ -57,11 +68,11 @@ exports.create = async (req, res) => {
 
     // Save Housing in the database
     await db.sequelize.transaction(async (transaction) => {
-        const createdHousing = await Housing.create(housing, { transaction });
+        const createdHousing = await db.housing.create(housing, { transaction });
         await createdHousing.addHeatings(req.body.heatings ?? [], { transaction });
         await createdHousing.addParkings(req.body.parkings ?? [], { transaction });
     });
-    return res.redirect("/housing/create?message=Success");
+    return res.redirect("/dashboard/housing/create?message=Success");
 };
 
 exports.updateView = async (req, res) => {
@@ -81,7 +92,7 @@ exports.update = async (req, res) => {
     const oldHousing = await findOneHousing(id);
     const diagnostic = await findOneDPEbyValues(req.body.consumption, req.body.emission);
 
-    const housing = {
+    const newHousing = {
         name: req.body.name,
         code: req.body.code,
         rent: req.body.rent,
@@ -99,25 +110,19 @@ exports.update = async (req, res) => {
 
     // Update Housing in the database
     await db.sequelize.transaction(async (transaction) => {
-        await oldHousing.update(housing, { transaction });
+        await oldHousing.update(newHousing, { transaction });
         await oldHousing.removeHeatings(oldHousing.heatings, { transaction });
         await oldHousing.addHeatings(req.body.heatings ?? [], { transaction });
         await oldHousing.removeParkings(oldHousing.parkings, { transaction });
         await oldHousing.addParkings(req.body.parkings ?? [], { transaction });
     });
-    return res.redirect("/housing/update/" + id + "?message=Success");
+    return res.redirect("/dashboard/housing/update/" + id + "?message=Success");
 };
 
 exports.deleteHousing = async (req, res) => {
     const id = req.params.id;
     await db.sequelize.transaction(async (transaction) => {
-        await Housing.destroy({ where: { id: id }}, { transaction });
+        await db.housing.destroy({ where: { id: id }}, { transaction });
     });
-};
-
-exports.viewAll = async (req, res) => {
-    res.render("allHousing", {
-        title: "Tableau des locations",
-        housings: await findAllHousing(),
-    });
+    res.redirect("/dashboard/housing/all?message=Success");
 };

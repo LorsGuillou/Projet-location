@@ -59,6 +59,7 @@ app.use(express.static(path.join(__dirname, "public")));
  */
 
 const authController = require("./controllers/auth.controller");
+const userController = require("./controllers/user.controller");
 const housingController = require("./controllers/housing.controller");
 const housingService = require("./services/housing.service");
 const locationController = require("./controllers/renting.controller");
@@ -73,16 +74,10 @@ const housings = housingService.findAllHousing();
 app.get("/", housingController.welcomeView);
 
 // all locations
-app.get("/location/all", housingController.allView);
+app.get("/location/all", housingController.allViewFront);
 
 // single location
-app.get("/location/:id", (req, res) => {
-    var locationId = req.params.id;
-    res.render("single", {
-        title: data[locationId][text],
-        item: data[locationId],
-    });
-});
+app.get("/location/:id", housingController.singleView);
 
 
 
@@ -122,11 +117,7 @@ app.post("/signin", authController.signin);
 
 app.get("/signout", authController.signout);
 
-app.get("/account", authJwt.verifyToken, authJwt.isUser, (req, res) => {
-    res.render("account", {
-        title: "Votre compte",
-    });
-});
+app.get("/account", authJwt.verifyToken, authJwt.isUser, userController.accountView);
 
 app.get("/dashboard", authJwt.verifyToken, authJwt.isAdmin, (req, res) => {
     res.render("dashboard", {
@@ -135,15 +126,17 @@ app.get("/dashboard", authJwt.verifyToken, authJwt.isAdmin, (req, res) => {
 });
 
 // authJwt.verifyToken, authJwt.isAdmin,
-app.get("/housing/all", housingController.viewAll);
+app.get("/dashboard/housing/all", housingController.allViewBack);
 
-app.get("/housing/create",  housingController.createView);
+app.get("/dashboard/housing/create",  housingController.createView);
 
-app.post("/housing/create", housingController.create);
+app.post("/dashboard/housing/create", housingController.create);
 
-app.get("/housing/update/:id", housingController.updateView);
+app.get("/dashboard/housing/update/:id", housingController.updateView);
 
-app.post("/housing/update/:id", housingController.update);
+app.post("/dashboard/housing/update/:id", housingController.update);
+
+app.get("/dashboard/housing/delete/:id", housingController.deleteHousing);
 
 // 404
 app.use((req, res, next) => {

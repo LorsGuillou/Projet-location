@@ -1,28 +1,27 @@
 const db = require("../models");
-const Dpe = db.dpe;
 const Op = db.Sequelize.Op;
 
 exports.findOneDPEbyValues = async (consumption, emission) => {
-    const result = await Dpe.findOne({
+    const result = await db.dpe.findOne({
         where: {
             minConsumption: {
-                [Op.lte]: consumption
+                [Op.lte]: consumption,
             },
             maxConsumption: {
-                [Op.gte]: consumption
+                [Op.gte]: consumption,
             },
             minEmission: {
-                [Op.lte]: emission
+                [Op.lte]: emission,
             },
             maxEmission: {
-                [Op.gte]: emission
-            }
-        }
+                [Op.gte]: emission,
+            },
+        },
     });
     return result;
-}
+};
 
-exports.findOneDPEId = async (id) => {
-    const result = await Dpe.findByPk(id);
+exports.findOneDPEById = async (id) => {
+    const result = await db.dpe.findByPk(id);
     return result;
-}
+};
