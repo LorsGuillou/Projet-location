@@ -4,7 +4,7 @@ block content
     h1.font-bold.text-3xl.underline.text-center.mb-5 Ajouter un nouveau logement à la location
     h2.font-bold.text-2xl.text-center.mb-5= message
     div#create-house-form.flex.flex-center.justify-center
-        form(action="/housing/create", method="POST").bg-base-300.flex.flex-col.p-5.items-center
+        form(action="/dashboard/housing/create", method="POST").bg-base-300.flex.flex-col.p-5.items-center
             div.mb-5
                 label(for="name").block Nom
                 input(type="text" name="name")

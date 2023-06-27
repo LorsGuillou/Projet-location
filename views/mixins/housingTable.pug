@@ -1,0 +1,7 @@
+mixin housingTable(housing)
+    tr
+        th= housing.name
+        th= housing.code 
+        th 
+            a(href="/location/" + housing.id).btn.btn-primary Voir la page
+            a(href="/dashboard/housing/delete/" + housing.id).btn.btn-warning Effacer

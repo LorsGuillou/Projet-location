@@ -1,6 +1,7 @@
 extends layout
 
 block content
+    p= alert
     div.text-center.my-5.mx-5
         h1= housing.name
         p= housing.code
@@ -12,3 +13,18 @@ block content
         p= housing.code
         p= housing.code
         p= housing.code
+
+    div#reservationForm.text-center.my-5.mx-5
+        h2.font-bold.text-2xl.underline.text-center.mx-3 Réserver un séjour dans ce logement
+        if (username)
+                form(action="/location/" + housing.id + "/rent", method="POST")
+                    div.mb-5
+                        label(for="start").block Début :
+                        input(type="date" name="start")
+                    div.mb-5
+                        label(for="end").block Fin :
+                        input(type="date" name="end")
+                    div 
+                        button(type="submit").btn.btn-secondary Enregistrer
+        else 
+            a(href="/signin") Connectez-vous pour effectuer une réservation

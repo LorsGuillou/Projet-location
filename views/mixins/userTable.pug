@@ -1,0 +1,7 @@
+mixin housingTable(user)
+    tr
+        th= user.username
+        th= user.email 
+        th 
+            a(href="#").btn.btn-primary Envoyer un mail
+            a(href="/dashboard/user/delete/" + user.id).btn.btn-warning Supprimer ce compte

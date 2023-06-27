@@ -62,7 +62,7 @@ const authController = require("./controllers/auth.controller");
 const userController = require("./controllers/user.controller");
 const housingController = require("./controllers/housing.controller");
 const housingService = require("./services/housing.service");
-const locationController = require("./controllers/renting.controller");
+const rentingController = require("./controllers/renting.controller");
 
 const housings = housingService.findAllHousing();
 
@@ -79,7 +79,7 @@ app.get("/location/all", housingController.allViewFront);
 // single location
 app.get("/location/:id", housingController.singleView);
 
-
+app.post("/location/:id/rent", rentingController.create);
 
 // about
 app.get("/about", (req, res) => {
@@ -119,13 +119,14 @@ app.get("/signout", authController.signout);
 
 app.get("/account", authJwt.verifyToken, authJwt.isUser, userController.accountView);
 
-app.get("/dashboard", authJwt.verifyToken, authJwt.isAdmin, (req, res) => {
+// authJwt.verifyToken, authJwt.isAdmin,
+
+app.get("/dashboard", (req, res) => {
     res.render("dashboard", {
         title: "Administration",
     });
 });
 
-// authJwt.verifyToken, authJwt.isAdmin,
 app.get("/dashboard/housing/all", housingController.allViewBack);
 
 app.get("/dashboard/housing/create",  housingController.createView);
@@ -137,6 +138,8 @@ app.get("/dashboard/housing/update/:id", housingController.updateView);
 app.post("/dashboard/housing/update/:id", housingController.update);
 
 app.get("/dashboard/housing/delete/:id", housingController.deleteHousing);
+
+app.get("/dashboard/users/all", userController.allUsersView);
 
 // 404
 app.use((req, res, next) => {

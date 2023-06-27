@@ -1,9 +1,7 @@
 const db = require("../models");
 
-exports.findCurrentUser = async (username) => {
-    const result = await db.user.findOne({
-        where: { username: username },
-    });
+exports.findCurrentUser = async (id) => {
+    const result = await db.user.findByPk(id);
     return result;
 };
 

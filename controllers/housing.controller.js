@@ -28,11 +28,14 @@ exports.allViewBack = async (req, res) => {
 };
 
 exports.singleView = async (req, res) => {
+    const alert = req.session.alert;
     const id = req.params.id;
     const housing = await findOneHousing(id);
+    
     res.render("single", {
         housing,
-        title: housing.name
+        title: housing.name,
+        alert
     });
 };
 
@@ -48,7 +51,6 @@ exports.createView = async (req, res) => {
 
 exports.create = async (req, res) => {
     const diagnostic = await findOneDPEbyValues(req.body.consumption, req.body.emission);
-    console.log(diagnostic);
 
     const housing = {
         name: req.body.name,
@@ -88,8 +90,7 @@ exports.updateView = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-    const id = req.params.id;
-    const oldHousing = await findOneHousing(id);
+    const oldHousing = await findOneHousing(req.params.id);
     const diagnostic = await findOneDPEbyValues(req.body.consumption, req.body.emission);
 
     const newHousing = {

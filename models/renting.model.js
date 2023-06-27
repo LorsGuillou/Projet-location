@@ -5,6 +5,9 @@ module.exports = (sequelize, Sequelize) => {
         },
         end: {
             type: Sequelize.DATEONLY
+        },
+        status: {
+            type: Sequelize.STRING
         }
     });
 

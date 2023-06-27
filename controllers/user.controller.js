@@ -3,23 +3,21 @@ const { findCurrentUser, findAllUsers } = require("../services/user.service");
 const bcrypt = require("bcryptjs");
 
 exports.accountView = async (req, res) => {
-    const username = req.session.username;
     res.render("account", {
         title: "Votre compte",
-        userData: await findCurrentUser(username),
+        userData: await findCurrentUser(req.session.userId),
     });
 };
 
 exports.allUsersView = async (req, res) => {
-    res.render("/users/all", {
+    res.render("allUsers", {
         users: await findAllUsers(),
         title: "Tout les utilisateurs",
     });
 };
 
 exports.update = async (req, res) => {
-    const name = req.session.username;
-    const oldUser = await findCurrentUser(name);
+    const oldUser = await findCurrentUser(req.session.userId);
 
     const updatedUser = {
         username: req.body.username,

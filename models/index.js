@@ -45,18 +45,20 @@ db.user.belongsToMany(db.role, {
     otherKey: "roleId"
 });
 
-// User / Housing relation
+// User / Renting relation
 
-db.user.belongsToMany(db.housing, {
-    through: db.renting,
+db.user.hasMany(db.renting);
+
+db.renting.belongsTo(db.user, {
     foreignKey: "userId",
-    otherKey: "housingId"
 });
 
-db.housing.belongsToMany(db.user, {
-    through: db.renting,
+// Renting / Housing relation
+
+db.housing.hasMany(db.renting);
+
+db.renting.belongsTo(db.housing, {
     foreignKey: "housingId",
-    otherKey: "userId"
 });
 
 // Housing / Town relation

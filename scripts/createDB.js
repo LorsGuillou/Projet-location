@@ -28,7 +28,7 @@ async function run() {
     async function createAdmin(roleMap) {
         const admin = await db.user.create({
             username: "admin",
-            mail: "admin@admin.fr",
+            email: "admin@admin.fr",
             password: bcrypt.hashSync("admin", 8)
         });
         await admin.addRoles([roleMap.roleUser, roleMap.roleAdmin]);

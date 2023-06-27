@@ -1,0 +1,15 @@
+extends layout
+include mixins/userTable.pug
+
+block content 
+    h1= message
+    if (users != null)
+        table.table.table-zebra.w-full
+            tr 
+                th Pseudonyme
+                th Email
+                th Actions
+                    each user in users 
+                        +housingTable(user)
+    else 
+        p Il n'y a rien ici pour le moment

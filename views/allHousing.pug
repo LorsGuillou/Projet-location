@@ -1,16 +1,15 @@
-extends layout 
+extends layout
+include mixins/housingTable.pug
 
 block content 
     h1= message
-    table
-        tr 
-            th Nom
-            th Code
-            th Actions
-        if (housings) 
-            each housing in housings 
-                tr
-                    th= housing.name
-                    th= housing.code 
-                    th 
-                        a(href="/dashboard/housing/delete/" + housing.id).btn.btn-warning Effacer
+    if (housings != null)
+        table.table.table-zebra.w-full
+            tr 
+                th Nom
+                th Code
+                th Actions
+                    each housing in housings 
+                        +housingTable(housing)
+    else 
+        p Il n'y a rien ici pour le moment

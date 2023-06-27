@@ -67,7 +67,7 @@ exports.signin = async (req, res) => {
         }
 
         req.session.token = token;
-        req.session.id = user.id;
+        req.session.userId = user.id;
         req.session.username = user.username;
         req.session.email = user.email;
         req.session.roles = authorities;

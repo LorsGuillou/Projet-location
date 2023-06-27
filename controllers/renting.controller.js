@@ -1,91 +1,63 @@
 const db = require("../models");
+const { findOneHousing } = require("../services/housing.service");
+const { findOneStay, compareStays } = require("../services/renting.service");
+const { findCurrentUser } = require("../services/user.service");
 const Location = db.location;
 const Op = db.Sequelize.Op;
 
-exports.create = (req, res) => {
-    // Validate request
-    if (!req.body.title) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
+exports.create = async (req, res) => {
 
-    // Create a new Location object
-    const location = {
+    const renting = {
         start: req.body.start,
-        end: req.body.end
+        end: req.body.end,
+        userId: req.session.userId,
+        housingId: req.params.id,
+    };
+
+    const comparison = await compareStays(renting.housingId, renting.start, renting.end);
+
+    if (comparison != null) {
+        req.session.alert = "Un séjour existe déjà sur cette période, veuillez changer les dates saisies."
+        return res.redirect("/location/" + req.params.id);
+    }
+    
+    if (renting.start > renting.end) {
+        req.session.alert = "Votre arrivée prévu est une date plus avancée que votre départ, veuillez changer les dates saisies."
+        return res.redirect("/location/" + req.params.id);
+    }
+    await db.sequelize.transaction(async (transaction) => {
+        await db.renting.create(renting, { transaction });
+    });
+    req.session.alert = "Séjour enregistré."
+    return res.redirect("/location/" + req.params.id);
+};
+
+exports.update = async (req, res) => {
+    const oldStay = await findOneStay(req.params.id);
+
+    const newStay = {
+        start: req.body.start,
+        end: req.body.end,
+        status: "En attente"
+    };
+
+    const comparison = await compareStays(oldStay.housingId, renting.start, renting.end);
+
+    if (comparison != null) {
+        req.session.alert = "Un séjour existe déjà sur cette période, veuillez changer les dates saisies."
+        return res.redirect("/account/location/" + req.params.id);
     }
 
-    // Save Location in the database
-    Location.create(location)
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while creating the Location."
-            });
-        });
-};
+    if (newStay.start > newStay.end) {
+        req.session.alert = "Votre arrivée prévu est une date plus avancée que votre départ, veuillez changer les dates saisies."
+        return res.redirect("/account/location/" + req.params.id);
+    }
 
-exports.findAll = (req, res) => {
-    const start = req.query.start;
-    var condition = start ? { start: { [Op.like]: `%${start}%` } } : null;
-    Location.findAll({ where: condition })
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Locations."
-            });
-        });
-};  
-
-exports.findOne = (req, res) => {
-    const id = req.params.id;
-
-    Location.findByPk(id)
-        .then(data => {
-            if (data) {
-                res.send(data);
-            } else {
-                res.status(404).send({
-                    message: `Cannot find Location with id=${id}.`
-                });
-            }
-        })
-        .catch(err => {
-            res.status(500).send({
-                message : "Error retrieving Location with id=" + id
-            });
-        });
-};
-
-exports.update = (req, res) => {
-    const id = req.params.id;
-
-    Location.update(req.body, {
-        where: { id: id }
-    })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Location was updated successfully."
-                });
-            } else {
-                res.send({
-                    message: `Cannot update Location with id=${id}. Maybe Location was not found or req.body is empty!`
-                });
-            }
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: "Error updating Location with id=" + id
-            });
-        });
+    await db.sequelize.transaction(async (transaction) => {
+        await oldStay.update(newStay, { transaction });
+    });
+    req.session.alert = "Votre séjour a bien été enregistré."
+    return res.redirect("/location/" + req.params.id);
 };
 
 exports.delete = (req, res) => {

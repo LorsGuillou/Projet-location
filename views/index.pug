@@ -8,10 +8,10 @@ block content
     div#home-display
         h2.font-bold.text-2xl.underline.text-center.mx-3 Dernières locations
         div#last-locs.flex.flex-auto.items-center.mt-5.container.gap-5.justify-center.items-stretch
-            if (housings != null)
+            if (housings == null)
+                p Il n'y a rien pour le moment
+            else
                 each housing in housings
                     +card(housing)
-            else
-                p Il n'y a rien pour le moment
 
 
