@@ -8,7 +8,7 @@ exports.accountView = async (req, res) => {
     res.render("account", {
         title: "Votre compte",
         userData: await findCurrentUser(id),
-        rents: await findUserStays(id);
+        rents: await findUserStays(id)
     });
 };
 
