@@ -68,7 +68,6 @@ exports.create = async (req, res) => {
         details: req.body.details,
     };
 
-    // Save Housing in the database
     await db.sequelize.transaction(async (transaction) => {
         const createdHousing = await db.housing.create(housing, { transaction });
         await createdHousing.addHeatings(req.body.heatings ?? [], { transaction });

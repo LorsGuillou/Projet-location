@@ -24,7 +24,6 @@ verifyToken = (req, res, next) => {
 };
 
 isUser = async (req, res, next) => {
-    try {
         const user = await User.findByPk(req.userId);
         const roles = await user.getRoles();
 
@@ -36,15 +35,10 @@ isUser = async (req, res, next) => {
 
         req.session.message = "La page à laquelle vous avez tenter d'accéder requiert d'être connecté."
         return res.redirect("/login");
-    } catch (error) {
-        return res.status(500).send({
-            message: "Unable to validate User role!",
-        });
-    }
 };
 
 isAdmin = async (req, res, next) => {
-    try {
+
         const user = await User.findByPk(req.userId);
         const roles = await user.getRoles();
 
@@ -55,11 +49,6 @@ isAdmin = async (req, res, next) => {
         }
 
         return res.redirect("/");
-    } catch (error) {
-        return res.status(500).send({
-            message: "Unable to validate User role!",
-        });
-    }
 };
 
 const authJwt = {
