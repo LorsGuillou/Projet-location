@@ -1,9 +1,6 @@
 const db = require("../models");
 const config = require("../config/auth.config");
-const User = db.user;
-const Role = db.role;
-
-const Op = db.Sequelize.Op;
+const User = db.user;B
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -55,7 +52,6 @@ exports.signin = async (req, res) => {
             config.secret,
             {
                 algorithm: "HS256",
-                allowInsecureKeySizes: true,
                 expiresIn: 86400, // 24 hours
             }
         );

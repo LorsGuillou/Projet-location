@@ -2,17 +2,36 @@ extends layout
 
 block content
     p= alert
-    div.text-center.my-5.mx-5
-        h1= housing.name
-        p= housing.code
-        p= housing.rent
-        p= housing.address
-        p= housing.code
-        p= housing.code
-        p= housing.code
-        p= housing.code
-        p= housing.code
-        p= housing.code
+    div.text-center.my-5.mx-5.stats.stats-vertical.shadow
+        div.stat
+            h1.stat-value= housing.name
+        div.stat
+            p.stat-title Code
+            p.stat-value= housing.code
+        div.stat
+            p.stat-title Loyer
+            p.stat-value= housing.rent
+        div.stat
+            p.stat-title Adresse
+            p.stat-value= housing.address
+        div.stat
+            p.stat-title Pièces
+            p.stat-value= housing.room
+        div.stat
+            p.stat-title Chambres
+            p.stat-value= housing.bedroom
+        div.stat
+            p.stat-title Salle de bain
+            p.stat-value= housing.bathroom
+        div.stat
+            p.stat-title Surface (m²)
+            p.stat-value= housing.surface
+        div.stat
+            p.stat-title Surface (m²)
+            p.stat-value= housing.surface
+        div.stat
+            p.stat-title Surface (m²)
+            p.stat-value= housing.surface
 
     div#reservationForm.text-center.my-5.mx-5
         h2.font-bold.text-2xl.underline.text-center.mx-3 Réserver un séjour dans ce logement

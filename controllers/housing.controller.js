@@ -1,9 +1,9 @@
 const db = require("../models");
-const { findOneDPEbyValues } = require("../services/dpe.service");
+const { findOneDPEbyValues, findOneDPEById } = require("../services/dpe.service");
 const { findAllHeatings } = require("../services/heating.service");
 const { findOneHousing, findAllHousing, findAllRecent } = require("../services/housing.service");
 const { findAllParkings } = require("../services/parking.service");
-const { findAllTowns } = require("../services/town.service");
+const { findAllTowns, findOneTown } = require("../services/town.service");
 
 exports.welcomeView = async (req, res) => {
     res.render("index", {
@@ -31,11 +31,15 @@ exports.singleView = async (req, res) => {
     const alert = req.session.alert;
     const id = req.params.id;
     const housing = await findOneHousing(id);
-    
+    const town = await findOneTown(housing.townId);
+    const dpe = await findOneDPEById(housing.dpeId);
+
     res.render("single", {
         housing,
         title: housing.name,
-        alert
+        alert,
+        town,
+        dpe,
     });
 };
 
@@ -50,30 +54,36 @@ exports.createView = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-    const diagnostic = await findOneDPEbyValues(req.body.consumption, req.body.emission);
+    try {
+        const diagnostic = await findOneDPEbyValues(req.body.consumption, req.body.emission);
 
-    const housing = {
-        name: req.body.name,
-        code: req.body.code,
-        rent: req.body.rent,
-        address: req.body.address,
-        townId: req.body.town,
-        room: req.body.room,
-        bedroom: req.body.bedroom,
-        bathroom: req.body.bathroom,
-        surface: req.body.surface,
-        consumption: req.body.consumption,
-        emission: req.body.emission,
-        dpeId: diagnostic.id,
-        details: req.body.details,
-    };
+        const housing = {
+            name: req.body.name,
+            code: req.body.code,
+            rent: req.body.rent,
+            address: req.body.address,
+            townId: req.body.town,
+            room: req.body.room,
+            bedroom: req.body.bedroom,
+            bathroom: req.body.bathroom,
+            surface: req.body.surface,
+            consumption: req.body.consumption,
+            emission: req.body.emission,
+            dpeId: diagnostic.id,
+            details: req.body.details,
+        };
 
-    await db.sequelize.transaction(async (transaction) => {
-        const createdHousing = await db.housing.create(housing, { transaction });
-        await createdHousing.addHeatings(req.body.heatings ?? [], { transaction });
-        await createdHousing.addParkings(req.body.parkings ?? [], { transaction });
-    });
-    return res.redirect("/dashboard/housing/create?message=Success");
+        await db.sequelize.transaction(async (transaction) => {
+            const createdHousing = await db.housing.create(housing, { transaction });
+            await createdHousing.addHeatings(req.body.heatings ?? [], { transaction });
+            await createdHousing.addParkings(req.body.parkings ?? [], { transaction });
+        });
+        return res.redirect("/dashboard/housing/create?message=Success");
+    } catch (error) {
+        return res.status(500).send({
+            message: error.message,
+        });
+    }
 };
 
 exports.updateView = async (req, res) => {
@@ -89,40 +99,48 @@ exports.updateView = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-    const oldHousing = await findOneHousing(req.params.id);
-    const diagnostic = await findOneDPEbyValues(req.body.consumption, req.body.emission);
+    try {
+        const oldHousing = await findOneHousing(req.params.id);
+        const diagnostic = await findOneDPEbyValues(req.body.consumption, req.body.emission);
 
-    const newHousing = {
-        name: req.body.name,
-        code: req.body.code,
-        rent: req.body.rent,
-        address: req.body.address,
-        townId: req.body.town,
-        room: req.body.room,
-        bedroom: req.body.bedroom,
-        bathroom: req.body.bathroom,
-        surface: req.body.surface,
-        consumption: req.body.consumption,
-        emission: req.body.emission,
-        dpeId: diagnostic.id,
-        details: req.body.details,
-    };
+        const newHousing = {
+            name: req.body.name,
+            code: req.body.code,
+            rent: req.body.rent,
+            address: req.body.address,
+            townId: req.body.town,
+            room: req.body.room,
+            bedroom: req.body.bedroom,
+            bathroom: req.body.bathroom,
+            surface: req.body.surface,
+            consumption: req.body.consumption,
+            emission: req.body.emission,
+            dpeId: diagnostic.id,
+            details: req.body.details,
+        };
 
-    // Update Housing in the database
-    await db.sequelize.transaction(async (transaction) => {
-        await oldHousing.update(newHousing, { transaction });
-        await oldHousing.removeHeatings(oldHousing.heatings, { transaction });
-        await oldHousing.addHeatings(req.body.heatings ?? [], { transaction });
-        await oldHousing.removeParkings(oldHousing.parkings, { transaction });
-        await oldHousing.addParkings(req.body.parkings ?? [], { transaction });
-    });
-    return res.redirect("/dashboard/housing/update/" + id + "?message=Success");
+        // Update Housing in the database
+        await db.sequelize.transaction(async (transaction) => {
+            await oldHousing.update(newHousing, { transaction });
+            await oldHousing.removeHeatings(oldHousing.heatings, { transaction });
+            await oldHousing.addHeatings(req.body.heatings ?? [], { transaction });
+            await oldHousing.removeParkings(oldHousing.parkings, { transaction });
+            await oldHousing.addParkings(req.body.parkings ?? [], { transaction });
+        });
+        return res.redirect("/dashboard/housing/update/" + id + "?message=Success");
+    } catch (error) {
+        return res.status(500).send({
+            message: error.message,
+        });
+    }
 };
 
 exports.deleteHousing = async (req, res) => {
-    const id = req.params.id;
-    await db.sequelize.transaction(async (transaction) => {
-        await db.housing.destroy({ where: { id: id }}, { transaction });
-    });
-    res.redirect("/dashboard/housing/all?message=Success");
+
+        const id = req.params.id;
+        await db.sequelize.transaction(async (transaction) => {
+            await db.housing.destroy({ where: { id: id } }, { transaction });
+        });
+        res.redirect("/dashboard/housing/all?message=Success");
+
 };
